@@ -1,5 +1,6 @@
 #include <fstream>
 #include <cmath>
+#include <cassert>
 #include "bitmap.hpp"
 #include "exception.hpp"
 
@@ -49,9 +50,27 @@ void saveBitmap(const Bitmap& bitmap, const std::string& path) {
     EXCEPTION("Error saving bitmap at " << path);
   }
 
-  BmpHeader bmpHeader(bitmap.size()[1], bitmap.size()[0], bitmap.size()[2]);
+  size_t rows = bitmap.size()[0];
+  size_t cols = bitmap.size()[1];
+  size_t channels = bitmap.size()[2];
+
+  BmpHeader bmpHeader(cols, rows, channels);
   fout.write(reinterpret_cast<char*>(&bmpHeader), sizeof(bmpHeader));
-  fout.write(reinterpret_cast<char*>(bitmap.data), bitmap.numElements());
+
+  char zeros[4];
+  memset(zeros, 0, 4);
+
+  const uint8_t* ptr = bitmap.data;
+  for (size_t row = 0; row < rows; ++row) {
+    fout.write(reinterpret_cast<const char*>(ptr), cols * channels);
+    ptr += cols * channels;
+
+    size_t paddedRowSize = ceil(0.25 * cols * channels) * 4;
+    size_t rowPadding = paddedRowSize - cols * channels;
+
+    assert(rowPadding <= 4);
+    fout.write(zeros, rowPadding);
+  }
 }
 
 }
