@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cmath>
 #include "array.hpp"
 
 namespace cpputils {
@@ -12,7 +13,7 @@ const uint32_t BMP_HEADER_SIZE = 54;
 #pragma pack(push, 1)
 struct BmpFileHeader {
   BmpFileHeader(uint32_t w, uint32_t h, uint32_t channels)
-    : size(BMP_HEADER_SIZE + w * h * channels) {}
+    : size(BMP_HEADER_SIZE + h * ceil(0.25 * w * channels) * 4) {}
 
   char type[2] = {'B', 'M'};
   uint32_t size;

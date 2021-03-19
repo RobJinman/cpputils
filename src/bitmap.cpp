@@ -1,5 +1,4 @@
 #include <fstream>
-#include <cmath>
 #include <cassert>
 #include "bitmap.hpp"
 #include "exception.hpp"
