@@ -29,7 +29,7 @@ bool containsContiguously(const ContigMultiArray<T, D>& arr, std::initializer_li
   return true;
 }
 
-TEST_F(ContigMultiArrayTest, oneDimensional) {
+TEST_F(ContigMultiArrayTest, initialisationListContructor1d) {
   IntArr1 arr({0, 1, 2, 3, 4});
 
   ASSERT_EQ(5, arr.numElements());
@@ -40,7 +40,7 @@ TEST_F(ContigMultiArrayTest, oneDimensional) {
   ASSERT_EQ(4, arr[4]);
 }
 
-TEST_F(ContigMultiArrayTest, twoDimensional) {
+TEST_F(ContigMultiArrayTest, initialisationListContructor2d) {
   IntArr2 arr({
     {0, 1, 2, 3},
     {4, 5, 6, 7},
@@ -63,7 +63,52 @@ TEST_F(ContigMultiArrayTest, twoDimensional) {
   ASSERT_EQ(1, arr[2][3]);
 }
 
-TEST_F(ContigMultiArrayTest, threeDimensional) {
+TEST_F(ContigMultiArrayTest, sizeAfterInitialisationListConstruction2d) {
+  IntArr2 arr({
+    {0, 1, 2, 3},
+    {4, 5, 6, 7},
+    {8, 9, 0, 1}});
+
+  ASSERT_EQ(3, arr.size()[0]); // Rows
+  ASSERT_EQ(4, arr.size()[1]); // Columns
+}
+
+TEST_F(ContigMultiArrayTest, elementAssignment) {
+  size_t sz[] = { 3, 2 };
+  IntArr2 arr(sz);
+
+  arr[0][0] = 1;
+  arr[1][0] = 2;
+  arr[2][0] = 3;
+  arr[0][1] = 4;
+  arr[1][1] = 5;
+  arr[2][1] = 6;
+
+  ASSERT_EQ(1, arr[0][0]);
+  ASSERT_EQ(2, arr[1][0]);
+  ASSERT_EQ(3, arr[2][0]);
+  ASSERT_EQ(4, arr[0][1]);
+  ASSERT_EQ(5, arr[1][1]);
+  ASSERT_EQ(6, arr[2][1]);
+}
+
+TEST_F(ContigMultiArrayTest, moveConstructor) {
+  IntArr2 arr({
+    {1, 2, 3},
+    {4, 5, 6}
+  });
+
+  IntArr2 cpy(std::move(arr));
+
+  ASSERT_EQ(1, cpy[0][0]);
+  ASSERT_EQ(2, cpy[0][1]);
+  ASSERT_EQ(3, cpy[0][2]);
+  ASSERT_EQ(4, cpy[1][0]);
+  ASSERT_EQ(5, cpy[1][1]);
+  ASSERT_EQ(6, cpy[1][2]);
+}
+
+TEST_F(ContigMultiArrayTest, initialisationListContructor3d) {
   IntArr3 arr({
     {{0, 1}, {2, 3}, {4, 5}, {6, 7}},
     {{8, 9}, {0, 1}, {2, 3}, {4, 5}},

@@ -20,8 +20,8 @@ Bitmap loadBitmap(const std::string& path) {
   uint32_t channels = bmpHeader.imgHdr.bitCount / 8;
 
   size_t size[3];
-  size[0] = bmpHeader.imgHdr.width;
-  size[1] = bmpHeader.imgHdr.height;
+  size[0] = bmpHeader.imgHdr.height; // Rows
+  size[1] = bmpHeader.imgHdr.width;  // Columns
   size[2] = channels;
 
   size_t bytes = size[0] * size[1] * size[2];
@@ -29,12 +29,12 @@ Bitmap loadBitmap(const std::string& path) {
 
   fin.seekg(bmpHeader.fileHdr.offset);
 
-  size_t rowBytes = size[0] * channels;
+  size_t rowBytes = size[1] * channels;
   size_t paddedRowBytes = ceil(0.25 * rowBytes) * 4;
   size_t rowPadding = paddedRowBytes - rowBytes;
 
   char* ptr = reinterpret_cast<char*>(data);
-  for (size_t row = 0; row < size[1]; ++row) {
+  for (size_t row = 0; row < size[0]; ++row) {
     fin.read(ptr, rowBytes);
     fin.ignore(rowPadding);
     ptr += rowBytes;
@@ -49,7 +49,7 @@ void saveBitmap(const Bitmap& bitmap, const std::string& path) {
     EXCEPTION("Error saving bitmap at " << path);
   }
 
-  BmpHeader bmpHeader(bitmap.size()[0], bitmap.size()[1], bitmap.size()[2]);
+  BmpHeader bmpHeader(bitmap.size()[1], bitmap.size()[0], bitmap.size()[2]);
   fout.write(reinterpret_cast<char*>(&bmpHeader), sizeof(bmpHeader));
   fout.write(reinterpret_cast<char*>(bitmap.data), bitmap.numElements());
 }

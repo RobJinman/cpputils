@@ -20,6 +20,7 @@ class ContigMultiArray {
       data = mv.data;
       memcpy(m_size, mv.m_size, sizeof(size_t) * D);
       m_numElements = mv.m_numElements;
+      m_stride = mv.m_stride;
       m_isTopLevel = mv.m_isTopLevel;
 
       mv.data = nullptr;
