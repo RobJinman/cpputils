@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
-#include <contig_multi_array.hpp>
+#include <array.hpp>
+
+
+using cpputils::ContigMultiArray;
 
 
 class ContigMultiArrayTest : public testing::Test {
@@ -29,14 +32,12 @@ bool containsContiguously(const ContigMultiArray<T, D>& arr, std::initializer_li
 TEST_F(ContigMultiArrayTest, oneDimensional) {
   IntArr1 arr({0, 1, 2, 3, 4});
 
-  ASSERT_EQ(5, arr.length());
+  ASSERT_EQ(5, arr.numElements());
   ASSERT_EQ(0, arr[0]);
   ASSERT_EQ(1, arr[1]);
   ASSERT_EQ(2, arr[2]);
   ASSERT_EQ(3, arr[3]);
   ASSERT_EQ(4, arr[4]);
-
-  arr.del();
 }
 
 TEST_F(ContigMultiArrayTest, twoDimensional) {
@@ -60,8 +61,6 @@ TEST_F(ContigMultiArrayTest, twoDimensional) {
   ASSERT_EQ(9, arr[2][1]);
   ASSERT_EQ(0, arr[2][2]);
   ASSERT_EQ(1, arr[2][3]);
-
-  arr.del();
 }
 
 TEST_F(ContigMultiArrayTest, threeDimensional) {
@@ -98,6 +97,4 @@ TEST_F(ContigMultiArrayTest, threeDimensional) {
   ASSERT_EQ(1, arr[2][2][1]);
   ASSERT_EQ(2, arr[2][3][0]);
   ASSERT_EQ(3, arr[2][3][1]);
-
-  arr.del();
 }
