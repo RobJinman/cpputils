@@ -9,7 +9,8 @@ using Bitmap = ContigMultiArray<uint8_t, 3>;
 
 const uint32_t BMP_HEADER_SIZE = 54;
 
-struct __attribute__ ((packed)) BmpFileHeader {
+#pragma pack(push, 1)
+struct BmpFileHeader {
   BmpFileHeader(uint32_t w, uint32_t h, uint32_t channels)
     : size(BMP_HEADER_SIZE + w * h * channels) {}
 
@@ -20,7 +21,7 @@ struct __attribute__ ((packed)) BmpFileHeader {
   uint32_t offset = BMP_HEADER_SIZE;
 };
 
-struct __attribute__ ((packed)) BmpImgHeader {
+struct BmpImgHeader {
   BmpImgHeader(uint32_t w, uint32_t h, uint32_t channels)
     : width(w),
       height(h),
@@ -39,7 +40,7 @@ struct __attribute__ ((packed)) BmpImgHeader {
   uint32_t numImportantColours = 0;
 };
 
-struct __attribute__ ((packed)) BmpHeader {
+struct BmpHeader {
   BmpHeader(uint32_t imgW, uint32_t imgH, int channels)
     : fileHdr(imgW, imgH, channels),
       imgHdr(imgW, imgH, channels) {}
@@ -47,6 +48,7 @@ struct __attribute__ ((packed)) BmpHeader {
   BmpFileHeader fileHdr;
   BmpImgHeader imgHdr;
 };
+#pragma pack(pop)
 
 Bitmap loadBitmap(const std::string& path);
 void saveBitmap(const Bitmap& bitmap, const std::string& path);
